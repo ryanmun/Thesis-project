@@ -104,7 +104,7 @@ else
 	{
 		echo "<div class = 'reg-form'>";
 		$pw = $uname;
-		$sql = "INSERT INTO employees (UserName,EmpPass,EmpName,Dept,EarnLeave,SickLeave,CasualLeave,EmpEmail,DateOfJoin,Random,Designation,EmpType,EmpFee,DateOfBirth) VALUES ('".$uname."','".$pw."','".$empname."','".$dept."','".$earnleave."','".$sickleave."','".$casualleave."','".$mailid."','".$doj."','".$random."','".$designation."','".$emptype."','".$empfee."','".$dob."')";
+		$sql = "INSERT INTO employees (UserName,EmpPass,EmpName,Dept,EarnLeave,SickLeave,CasualLeave,EmpEmail,DateOfJoin,Random,Designation,EmpType,EmpFee,UpdateStatus,DateOfBirth) VALUES "."('".$uname."','".$pw."','".$empname."','".$dept."','".$earnleave."','".$sickleave."','".$casualleave."','".$mailid."','".$doj."','".$random."','".$designation."','".$emptype."','".$empfee."','".$updatestatus."','".$dob."')";
 	if ($conn->query($sql) === TRUE) {
 			echo "<center>";
 			echo "<strong> Registration Successful !</strong><br/><br/>";
