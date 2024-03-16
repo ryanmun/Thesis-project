@@ -1,8 +1,8 @@
 <link rel="shortcut icon" type="image/png" href="favicon.png"/>
 <?php
 session_start();
-include 'connect.php';
-include 'mailer.php';
+include 'connect.php'; // Assuming 'connect.php' is still required
+// Removed inclusion of 'mailer.php'
 ?>							
 <style>
 	body{
@@ -18,94 +18,94 @@ if(isset($_SESSION['adminuser']))
 	$sql = "SELECT Dept,username FROM admins WHERE username = '".$_SESSION['adminuser']."'";
 	$result = $conn->query($sql);
 	if($result->num_rows > 0)
-		{
-			$row = $result->fetch_assoc();
-			$dept = $row["Dept"];
-		}
-include 'adminnavi.php';
-$errmsg = $sql = "";
-$empname = trim($_POST['empname']);
-$uname = trim($_POST['uname']);
-$mailid = trim($_POST['mailid']);
-$doj = trim($_POST['year-join'])."-".trim($_POST['month-join'])."-".trim($_POST['date-join']);
-$dob = trim($_POST['year-birth'])."-".trim($_POST['month-birth'])."-".trim($_POST['date-birth']);
-$dob2 = trim($_POST['date-birth'])."-".trim($_POST['month-birth'])."-".trim($_POST['year-birth']);
-$empname = strip_tags($empname);
-$uname = strip_tags($uname);
-$mailid = strip_tags($mailid);
-$doj = strip_tags($doj);
-$dob = strip_tags($dob);
-$dob2 = strip_tags($dob2);
-$pass = $dob2;
-$random=rand(0,9999999);
-$updatestatus=$doj;
-$designation = strip_tags(trim($_POST['designation']));
-$emptype = strip_tags(trim($_POST['factype']));
-$empfee = strip_tags(trim($_POST['facfee']));
-$earnleave = 0;
-$sickleave = 0;
-$casualleave = 0;
-if(empty($empname) || empty($uname) || empty($mailid) || empty($doj) || empty($dob))
+	{
+		$row = $result->fetch_assoc();
+		$dept = $row["Dept"];
+	}
+	include 'adminnavi.php'; // Assuming 'adminnavi.php' is still required
+	$errmsg = $sql = "";
+	$empname = trim($_POST['empname']);
+	$uname = trim($_POST['uname']);
+	$mailid = trim($_POST['mailid']);
+	$doj = trim($_POST['year-join'])."-".trim($_POST['month-join'])."-".trim($_POST['date-join']);
+	$dob = trim($_POST['year-birth'])."-".trim($_POST['month-birth'])."-".trim($_POST['date-birth']);
+	$dob2 = trim($_POST['date-birth'])."-".trim($_POST['month-birth'])."-".trim($_POST['year-birth']);
+	$empname = strip_tags($empname);
+	$uname = strip_tags($uname);
+	$mailid = strip_tags($mailid);
+	$doj = strip_tags($doj);
+	$dob = strip_tags($dob);
+	$dob2 = strip_tags($dob2);
+	$pass = $dob2;
+	$random=rand(0,9999999);
+	$updatestatus=$doj;
+	$designation = strip_tags(trim($_POST['designation']));
+	$emptype = strip_tags(trim($_POST['factype']));
+	$empfee = strip_tags(trim($_POST['facfee']));
+	$earnleave = 0;
+	$sickleave = 0;
+	$casualleave = 0;
+	if(empty($empname) || empty($uname) || empty($mailid) || empty($doj) || empty($dob))
 	{
 		$errmsg.="One or more fields are empty...";
 	}
-else{
-if(empty($doj))
-	{
-		$errmsg.="Date Of Joining is empty ! ";
-	}
-	if(empty($dob))
-	{
-		$errmsg.="Date Of Birth is empty ! ";
-	}
-if(strtotime($doj) > time())
-	{
-		$errmsg.=" Date Of Joining cannot be a future date..."; 
-	}
+	else{
+		if(empty($doj))
+		{
+			$errmsg.="Date Of Joining is empty ! ";
+		}
+		if(empty($dob))
+		{
+			$errmsg.="Date Of Birth is empty ! ";
+		}
+		if(strtotime($doj) > time())
+		{
+			$errmsg.=" Date Of Joining cannot be a future date..."; 
+		}
 
-$sql = "SELECT UserName,EmpEmail FROM employees";
-$result = $conn->query($sql);
+		$sql = "SELECT UserName,EmpEmail FROM employees";
+		$result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-			if($uname == $row["UserName"])
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				if($uname == $row["UserName"])
 				{
 					$errmsg.=" Username ".$uname." already taken...";
 				}
-			if($mailid == $row["EmpEmail"])
+				if($mailid == $row["EmpEmail"])
 				{
 					$errmsg.=" Your Entered Email ID is already registered with another user...";
 				}
+			}
+		}
+		if ((!filter_var($mailid, FILTER_VALIDATE_EMAIL)) || empty($mailid)) {
+			$errmsg.="Invalid email ID...";
 		}
 	}
-if ((!filter_var($mailid, FILTER_VALIDATE_EMAIL)) || empty($mailid)) {
-  $errmsg.="Invalid email ID...";
-	}
-}
-$sql2 = "SELECT * FROM admins WHERE username = '".$_SESSION['adminuser']."'";
-if($conn->query($sql2) == TRUE)
+	$sql2 = "SELECT * FROM admins WHERE username = '".$_SESSION['adminuser']."'";
+	if($conn->query($sql2) == TRUE)
 	{
 		$result = $conn->query($sql2);
 		if($result->num_rows > 0)
+		{
+			while($row2 = $result->fetch_assoc())
 			{
-				while($row2 = $result->fetch_assoc())
-					{
-						$earnleave = $row2['SetEarnLeave'];
-						$sickleave = $row2['SetSickLeave'];
-						$casualleave = $row2['SetCasualLeave'];
-					}
+				$earnleave = $row2['SetEarnLeave'];
+				$sickleave = $row2['SetSickLeave'];
+				$casualleave = $row2['SetCasualLeave'];
 			}
+		}
 	}
-if(!empty($errmsg))
+	if(!empty($errmsg))
 	{
-	header('location:index.php?err='.htmlspecialchars(urlencode($errmsg)));
+		header('location:index.php?err='.htmlspecialchars(urlencode($errmsg)));
 	}
-else
+	else
 	{
 		echo "<div class = 'reg-form'>";
 		$pw = $uname;
 		$sql = "INSERT INTO employees (UserName,EmpPass,EmpName,Dept,EarnLeave,SickLeave,CasualLeave,EmpEmail,DateOfJoin,Random,Designation,EmpType,EmpFee,UpdateStatus,DateOfBirth) VALUES "."('".$uname."','".$pw."','".$empname."','".$dept."','".$earnleave."','".$sickleave."','".$casualleave."','".$mailid."','".$doj."','".$random."','".$designation."','".$emptype."','".$empfee."','".$updatestatus."','".$dob."')";
-	if ($conn->query($sql) === TRUE) {
+		if ($conn->query($sql) === TRUE) {
 			echo "<center>";
 			echo "<strong> Registration Successful !</strong><br/><br/>";
 			echo "<u>Registration Details :</u><br/>";
@@ -117,20 +117,14 @@ else
 			echo "Designation : ".$designation."<br/>";
 			echo "Employment Type : ".$emptype." ; ".$empfee."<br/>";
 			echo "Date Of Birth : ".$dob2."<br/>";
-			$msg = "Registration Successful! \n\nUsername : ".$uname."\nEmployee Name : ".$empname."\nPassword : ".$pass."\nDepartment : ".$dept."\nEmail ID : ".$mailid."\nDate Of Joining (yyyy/mm/dd): ".$doj."\n\n\nThanks For Registering with us\n\n\n\nRegards,\nwebadmin, Leave Management System";
-			$to = $mailid;
-			$status = mailer($to,$msg);
-			if($status == true)
-				{
-					echo "<br/>Please check the email ".$mailid." for the confirmation page.<br/>";
-				}
+			// Removed mail functionality and related code
 			echo "</center>";
 			echo "</div>";
 		}
-			else {
-				echo "Error: " . $sql . "<br>" . $conn->error;
-					}
-$conn->close();
+		else {
+			echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+		$conn->close();
 	}
 }
 else
