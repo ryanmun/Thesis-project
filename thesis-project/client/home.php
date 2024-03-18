@@ -1,3 +1,36 @@
+<style>
+    /* Styles for the toast box */
+    .toast {
+        visibility: hidden;
+        min-width: 250px;
+        margin: auto;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        bottom: 30px;
+        transform: translateX(-50%);
+    }
+
+    .toast.show {
+        visibility: visible;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    @keyframes fadein {
+        from {bottom: 0; opacity: 0;}
+        to {bottom: 30px; opacity: 1;}
+    }
+
+    @keyframes fadeout {
+        from {bottom: 30px; opacity: 1;}
+        to {bottom: 0; opacity: 0;}
+    }
+</style>
 <?php
 session_start();
 
@@ -9,6 +42,10 @@ if(isset($_SESSION['user']))
        echo "<h2>Welcome, " . $_SESSION["user"] ."</h2>";
 	   if(isset($_GET['msg']))
 		{
+		$message = $_GET['msg'];
+        echo "<div id='toast' class='toast'>$message</div>";
+        echo "<script>document.getElementById('toast').classList.add('show');</script>";
+   
 		echo "<div class = 'error'><b><u>".htmlspecialchars($_GET['msg'])."</u></b></div><br/>";
 		}
 	   echo "<table>";

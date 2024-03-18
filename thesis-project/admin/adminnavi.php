@@ -50,7 +50,6 @@ li.dropdown {
     display: inline-block;
 }
 
-
 .dropdown-content {
     display: none;
     position: absolute;

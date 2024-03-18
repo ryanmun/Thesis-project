@@ -1,8 +1,7 @@
 <link rel="shortcut icon" type="image/png" href="favicon.png"/>
 <?php
 session_start();
-include 'connect.php'; // Assuming 'connect.php' is still required
-// Removed inclusion of 'mailer.php'
+include 'connect.php'; 
 ?>							
 <style>
 	body{
@@ -22,7 +21,7 @@ if(isset($_SESSION['adminuser']))
 		$row = $result->fetch_assoc();
 		$dept = $row["Dept"];
 	}
-	include 'adminnavi.php'; // Assuming 'adminnavi.php' is still required
+	include 'adminnavi.php'; 
 	$errmsg = $sql = "";
 	$empname = trim($_POST['empname']);
 	$uname = trim($_POST['uname']);
@@ -117,7 +116,6 @@ if(isset($_SESSION['adminuser']))
 			echo "Designation : ".$designation."<br/>";
 			echo "Employment Type : ".$emptype." ; ".$empfee."<br/>";
 			echo "Date Of Birth : ".$dob2."<br/>";
-			// Removed mail functionality and related code
 			echo "</center>";
 			echo "</div>";
 		}

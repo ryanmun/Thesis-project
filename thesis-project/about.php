@@ -34,7 +34,6 @@ confirmation page for the same.</p>";
 echo "<h4>The CLIENT CONSOLE consists of the following features:</h4>"; 
 
 echo "<p>Requesting for a leave</p>"; 
-echo"<p> Password recovery option (through email) </p>";
 echo "<p>Seeing the number of leaves available to him/her and all the details
 about him/her </p>"; 
 echo "<p>Viewing the complete profile of him/her with his/her
