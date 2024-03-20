@@ -16,9 +16,9 @@ if(isset($_SESSION['user'])) {
     }
 
     if($newpass !== $oldpass && $newpass !== $uname) {
-        if(strlen($newpass) >= 10) {
+        if(strlen($newpass) >= 5) {
             // Hash the old password for comparison
-            $oldpass_hashed = hash_hmac('sha512', 'salt'.$oldpass, md5($uname));
+            // $oldpass_hashed = hash_hmac('sha512', 'salt'.$oldpass, md5($uname));
 
             $sql = "SELECT id, UserName, EmpPass FROM employees WHERE UserName = ?";
             $stmt = $conn->prepare($sql);
@@ -31,15 +31,14 @@ if(isset($_SESSION['user'])) {
                 $id = $row['id'];
                 $stored_password = $row['EmpPass'];
 
-                // Verify the old password
-                if(password_verify($oldpass, $stored_password)) {
+                if ($oldpass==$stored_password){
                     // Hash the new password
-                    $newpass_hashed = password_hash($newpass, PASSWORD_DEFAULT);
+                    // $newpass_hashed = password_hash($newpass, PASSWORD_DEFAULT);
 
                     // Update the password in the database
                     $sql_update = "UPDATE employees SET EmpPass = ? WHERE id = ?";
                     $stmt_update = $conn->prepare($sql_update);
-                    $stmt_update->bind_param("si", $newpass_hashed, $id);
+                    $stmt_update->bind_param("si", $newpass, $id);
 
                     if($stmt_update->execute()) {
                         header("location:home.php?msg=".urlencode('Password Successfully Changed!'));
