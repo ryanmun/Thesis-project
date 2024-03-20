@@ -16,7 +16,7 @@ if(isset($_SESSION['user'])) {
     }
 
     if($newpass !== $oldpass && $newpass !== $uname) {
-        if(strlen($newpass) >= 5) {
+        if(strlen($newpass) >= 10) {
             // Hash the old password for comparison
             // $oldpass_hashed = hash_hmac('sha512', 'salt'.$oldpass, md5($uname));
 
